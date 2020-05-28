@@ -1,12 +1,12 @@
 import React from 'react';
 import './App.css'
-import Video from './components/uploadingfile'
+import Main from './components/main'
 import {  BrowserRouter as Router } from 'react-router-dom';
 class App extends React.Component {
 render(){
 return (  
     <Router>
-        <Video/>
+        <Main/>
     </Router>
 );
 }
