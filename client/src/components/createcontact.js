@@ -6,12 +6,15 @@ class CreateContact extends React.Component{
     constructor(props){
         super(props)
         this.state={
-            values:[]
+            mobileNumbers:[],
+            emails:[]
         }
         this.sendContactDetails=this.sendContactDetails.bind(this);
         this.goBack=this.goBack.bind(this);
         this.addMoreNumbers=this.addMoreNumbers.bind(this);
-        this.addClick=this.addClick.bind(this);
+        this.addNumbersClick=this.addNumbersClick.bind(this);
+        this.addMoreEmails=this.addMoreEmails.bind(this);
+        this.addEmailsClick=this.addEmailsClick.bind(this);
     }
 
   
@@ -34,12 +37,12 @@ class CreateContact extends React.Component{
     }
 
     // add more mobile numbers on clicking the button
-    addClick(){
-        this.setState(prevState => ({ values: [...prevState.values, '']}))
+    addNumbersClick(){
+        this.setState(prevState => ({ mobileNumbers: [...prevState.mobileNumbers, '']}))
     }
 
     addMoreNumbers(){
-        return this.state.values.map((currentValue, index) => 
+        return this.state.mobileNumbers.map((currentValue, index) => 
             <div key={index}>
                <Input type="text" value={currentValue||''} onChange={this.handleChange.bind(this, index)} style={{height:'6vh',marginTop:'2px'}}/>
                {/* <input type='button' value='remove' onClick={this.removeClick.bind(this, i)}/> */}
@@ -48,9 +51,28 @@ class CreateContact extends React.Component{
     }
 
     handleChange(i, event) {
-        let values = [...this.state.values];
-        values[i] = event.target.value;
-        this.setState({ values });
+        let mobileNumbers = [...this.state.mobileNumbers];
+        mobileNumbers[i] = event.target.value;
+        this.setState({ mobileNumbers });
+    }
+    //adding more emails on clicking the button
+    addEmailsClick(){
+        this.setState(prevState => ({ emails: [...prevState.emails, '']}))
+    }
+
+    addMoreEmails(){
+        return this.state.emails.map((currentValue, index) => 
+            <div key={index}>
+               <Input type="text" value={currentValue||''} onChange={this.handleChange.bind(this, index)} style={{height:'6vh',marginTop:'2px'}}  placeholder='saveTrees@gmail.com'/>
+               {/* <input type='button' value='remove' onClick={this.removeClick.bind(this, i)}/> */}
+            </div>          
+        )
+    }
+
+    handleChange(i, event) {
+        let emails = [...this.state.emails];
+        emails[i] = event.target.value;
+        this.setState({ emails });
     }
 
     //going back to the home page
@@ -59,7 +81,8 @@ class CreateContact extends React.Component{
     }
 
     render(){
-        console.log(this.state.values);
+        console.log(this.state.mobileNumbers);
+        console.log(this.state.emails);
         return(
             <div style={{display:'flex',justifyContent:'center',marginTop:'5vh'}}>
                 <Card id='contactDetails'>
@@ -88,24 +111,23 @@ class CreateContact extends React.Component{
                                     <div className='row'>
                                         <div className='col-md-11'>
                                             <Input type='tel' id='mobileNumber'  placeholder='' onBlur={this.error} style={{height:'6vh'}} />
-                                            {/* <div className='container' id='moreMobileNumbers'>
-                                                </div> */}
                                             {this.addMoreNumbers()} 
                                             </div>
                                             <div className='col-md-1'>
-                                                <span className='fa fa-plus fa-lg' onClick={this.addClick}></span>
+                                                <span className='fa fa-plus fa-lg' onClick={this.addNumbersClick}></span>
                                                 </div>
                                             </div>
-                                                <p id='numberError'></p>
+                                            <p id='numberError'></p>
                                     </FormGroup>
                                 <FormGroup className='canAddMore'>
                                     Email<span className='reddot'> *</span>
                                     <div className='row'>
                                         <div className='col-md-11'>
                                             <Input type='email' id='contactEmail'  placeholder='saveAnimals@gmail.com' onBlur={this.error} style={{height:'6vh'}}/>
+                                            {this.addMoreEmails()} 
                                             </div>
                                             <div className='col-md-1'>
-                                                <span className='fa fa-plus fa-lg'></span>
+                                                <span className='fa fa-plus fa-lg' onClick={this.addEmailsClick}></span>
                                                 </div>
                                         </div>
                                         <p id='numberError'></p>

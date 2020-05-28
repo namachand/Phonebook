@@ -12,10 +12,10 @@ const contactSchema=new mongoose.Schema({
         type:Number,
         default:''
     }],
-    email:{
+    email:[{
         type:String,
         default:''
-    },
+    }],
     date:{
         type:Date,
         default:Date.now()

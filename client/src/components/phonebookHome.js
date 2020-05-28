@@ -28,8 +28,6 @@ class Home extends React.Component{
         if(page !== this.state.pager.currentPage){
             axios.get(`http://localhost:3231/getUserContacts/contactDetailsPages?page=${page}`)
             .then((contacts)=>{
-                // console.log(data.data.allStories);
-                // console.log(data.data.pager);
                 this.setState({pager:contacts.data.pager});
                 this.setState({allContacts:contacts.data.allContacts});
                 })
@@ -37,6 +35,7 @@ class Home extends React.Component{
     }
 
     render(){
+        console.log(this.state.allContacts)
         return(
         <React.Fragment>
             <div>
@@ -72,7 +71,11 @@ class Home extends React.Component{
                                     </div>
                                     <div className='row' style={{backgroundColor:'papayawhip',marginTop:'15px',minHeight:'12vh'}}>
                                         <div className='col-md-4'>
-                                            <p className='fa fa-phone fa-lg contactdetail mt-2'>  {contact.mobileNumber}</p>
+                                            {contact.mobileNumber.map((number)=>{
+                                                return(
+                                                    <p className='fa fa-phone fa-lg contactdetail mt-2'>  {number}</p>
+                                                )
+                                            })}
                                             </div>
                                         <div className='col-md-6 offset-2' >
                                             <p className='fa fa-envelope fa-lg contactdetail mt-1' style={{paddingTop:'5px'}}>  {contact.email}</p>
