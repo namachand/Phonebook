@@ -5,25 +5,53 @@ import axios from 'axios';
 class CreateContact extends React.Component{
     constructor(props){
         super(props)
+        this.state={
+            values:[]
+        }
         this.sendContactDetails=this.sendContactDetails.bind(this);
         this.goBack=this.goBack.bind(this);
+        this.addMoreNumbers=this.addMoreNumbers.bind(this);
+        this.addClick=this.addClick.bind(this);
     }
+
+  
     //adding the contact details to the database
     sendContactDetails(event){
         event.preventDefault();
         var name=document.getElementById('contactName').value;
         var dateOfBirth=document.getElementById('contactDOB').value;
-        var mobileNumber=document.getElementById('contactNumber').value;
+        var mobileNumber=document.getElementById('mobileNumber').value;
         var email=document.getElementById('contactEmail').value;
-        console.log(name)
+        this.setState({values:this.state.values.concat([mobileNumber])});
+        console.log(this.values);
         axios.post('http://localhost:3231/addUsers/contactDetails',{name:name,dateOfBirth:dateOfBirth,mobileNumber:mobileNumber,email:email})
         .then((res)=>{
             console.log(res);
         })
         document.getElementById('contactName').value=''
         document.getElementById('contactDOB').value=''
-        document.getElementById('contactNumber').value=''
+        document.getElementById('mobileNumber').value=''
         document.getElementById('contactEmail').value=''
+    }
+
+    // add more mobile numbers on clicking the button
+    addClick(){
+        this.setState(prevState => ({ values: [...prevState.values, '']}))
+    }
+
+    addMoreNumbers(){
+        return this.state.values.map((currentValue, index) => 
+            <div key={index}>
+               <Input type="text" value={currentValue||''} onChange={this.handleChange.bind(this, index)} style={{height:'6vh',marginTop:'2px'}}/>
+               {/* <input type='button' value='remove' onClick={this.removeClick.bind(this, i)}/> */}
+            </div>          
+        )
+    }
+
+    handleChange(i, event) {
+        let values = [...this.state.values];
+        values[i] = event.target.value;
+        this.setState({ values });
     }
 
     //going back to the home page
@@ -32,6 +60,7 @@ class CreateContact extends React.Component{
     }
 
     render(){
+        console.log(this.state.values);
         return(
             <div style={{display:'flex',justifyContent:'center',marginTop:'5vh'}}>
                 <Card id='contactDetails'>
@@ -59,10 +88,13 @@ class CreateContact extends React.Component{
                                     Mobile Number<span className='reddot'> *</span>
                                     <div className='row'>
                                         <div className='col-md-11'>
-                                            <Input type='tel' id='contactNumber'  placeholder='' onBlur={this.error} style={{height:'6vh'}}/>
+                                            <Input type='tel' id='mobileNumber'  placeholder='' onBlur={this.error} style={{height:'6vh'}} />
+                                            {/* <div className='container' id='moreMobileNumbers'>
+                                                </div> */}
+                                            {this.addMoreNumbers()} 
                                             </div>
                                             <div className='col-md-1'>
-                                                <span className='fa fa-plus fa-lg'></span>
+                                                <span className='fa fa-plus fa-lg' onClick={this.addClick}></span>
                                                 </div>
                                             </div>
                                                 <p id='numberError'></p>

@@ -1,6 +1,6 @@
 #contactDetails{
     width:32vw;
-    height:60vh;
+    min-height: 60vh;
 }
 .reddot{
     color:red;
