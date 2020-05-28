@@ -8,10 +8,10 @@ const contactSchema=new mongoose.Schema({
         type:String,
         default:'',
     },
-    mobileNumber:{
+    mobileNumber:[{
         type:Number,
         default:''
-    },
+    }],
     email:{
         type:String,
         default:''

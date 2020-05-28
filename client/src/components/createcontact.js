@@ -23,8 +23,7 @@ class CreateContact extends React.Component{
         var mobileNumber=document.getElementById('mobileNumber').value;
         var email=document.getElementById('contactEmail').value;
         this.setState({values:this.state.values.concat([mobileNumber])});
-        console.log(this.values);
-        axios.post('http://localhost:3231/addUsers/contactDetails',{name:name,dateOfBirth:dateOfBirth,mobileNumber:mobileNumber,email:email})
+        axios.post('http://localhost:3231/addUsers/contactDetails',{name:name,dateOfBirth:dateOfBirth,mobileNumber:this.state.values,email:email})
         .then((res)=>{
             console.log(res);
         })
