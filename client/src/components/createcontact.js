@@ -25,8 +25,11 @@ class CreateContact extends React.Component{
         var dateOfBirth=document.getElementById('contactDOB').value;
         var mobileNumber=document.getElementById('mobileNumber').value;
         var email=document.getElementById('contactEmail').value;
-        this.setState({values:this.state.values.concat([mobileNumber])});
-        axios.post('http://localhost:3231/addUsers/contactDetails',{name:name,dateOfBirth:dateOfBirth,mobileNumber:this.state.values,email:email})
+        this.setState({mobileNumbers:this.state.mobileNumbers.concat([mobileNumber])});
+        this.setState({emails:this.state.emails.concat([email])})
+        console.log(this.state.mobileNumbers)
+        console.log(this.state.emails)
+        axios.post('http://localhost:3231/addUsers/contactDetails',{name:name,dateOfBirth:dateOfBirth,mobileNumber:this.state.mobileNumbers,email:this.state.emails})
         .then((res)=>{
             console.log(res);
         })
@@ -44,13 +47,13 @@ class CreateContact extends React.Component{
     addMoreNumbers(){
         return this.state.mobileNumbers.map((currentValue, index) => 
             <div key={index}>
-               <Input type="text" value={currentValue||''} onChange={this.handleChange.bind(this, index)} style={{height:'6vh',marginTop:'2px'}}/>
+               <Input type="text" value={currentValue||''} onChange={this.handleNumbers.bind(this, index)} style={{height:'6vh',marginTop:'2px'}}/>
                {/* <input type='button' value='remove' onClick={this.removeClick.bind(this, i)}/> */}
             </div>          
         )
     }
 
-    handleChange(i, event) {
+    handleNumbers(i, event) {
         let mobileNumbers = [...this.state.mobileNumbers];
         mobileNumbers[i] = event.target.value;
         this.setState({ mobileNumbers });
@@ -63,13 +66,13 @@ class CreateContact extends React.Component{
     addMoreEmails(){
         return this.state.emails.map((currentValue, index) => 
             <div key={index}>
-               <Input type="text" value={currentValue||''} onChange={this.handleChange.bind(this, index)} style={{height:'6vh',marginTop:'2px'}}  placeholder='saveTrees@gmail.com'/>
+               <Input type="text" value={currentValue||''} onChange={this.handleEmails.bind(this, index)} style={{height:'6vh',marginTop:'2px'}}  placeholder='saveTrees@gmail.com'/>
                {/* <input type='button' value='remove' onClick={this.removeClick.bind(this, i)}/> */}
             </div>          
         )
     }
 
-    handleChange(i, event) {
+    handleEmails(i, event) {
         let emails = [...this.state.emails];
         emails[i] = event.target.value;
         this.setState({ emails });
