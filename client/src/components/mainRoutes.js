@@ -1,7 +1,7 @@
 import React from 'react';
 import {Switch,Route} from 'react-router-dom';
-import Home from './home';
-class Main extends React.Component{
+import Home from './phonebookHome';
+class MainRoutes extends React.Component{
   render(){
     return (  
       <div>
@@ -12,4 +12,4 @@ class Main extends React.Component{
     );
   }
 }
-export default Main;
+export default MainRoutes;
