@@ -1,0 +1,11 @@
+#createContact{
+    float:right;
+    margin-top:90vh;
+    margin-right:5vh;
+}
+.contactdetail{
+    font-size: x-large;
+}
+#phoneAndEmail{
+    border:solid,1px,black
+}
