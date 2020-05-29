@@ -78,7 +78,7 @@ class CreateContact extends React.Component{
                         <Input type="Number" value={currentValue}  onChange={this.handleNumbers.bind(this, index)} style={{height:'6vh',marginTop:'2px',width:'26.5vw'}}/>
                         </div>
                         <div className='col-md-2 '>
-                            <span className='fa fa-times fa-lg'  onClick={this.removeClick.bind(this, index)}></span>
+                            <span className='fa fa-times fa-lg'  onClick={this.removeNumberClick.bind(this, index)}></span>
                             </div>
                 </div>     
         )
@@ -102,7 +102,7 @@ class CreateContact extends React.Component{
                     <Input type="email" value={currentValue}  onChange={this.handleEmails.bind(this, index)} style={{height:'6vh',marginTop:'2px',width:'26.5vw'}}  placeholder='saveTrees@gmail.com'/>
                     </div>
                     <div className='col-md-2'>
-                        <span className='fa fa-times fa-lg'  onClick={this.removeClick.bind(this, index)}></span>
+                        <span className='fa fa-times fa-lg'  onClick={this.removeEmailClick.bind(this, index)}></span>
                         </div>
             </div>          
         )
@@ -115,10 +115,17 @@ class CreateContact extends React.Component{
             this.setState({ emails });
         }
     }
-    removeClick(i){
+    //removing extra created phonenumbers
+    removeNumberClick(i){
         let mobileNumbers = [...this.state.mobileNumbers];
         mobileNumbers.splice(i,1);
         this.setState({ mobileNumbers });
+     }
+    //removing extra created emails
+     removeEmailClick(i){
+        let emails = [...this.state.emails];
+        emails.splice(i,1);
+        this.setState({ emails });
      }
     //going back to the home page
     goBack(){

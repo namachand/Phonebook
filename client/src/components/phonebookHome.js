@@ -39,18 +39,17 @@ class Home extends React.Component{
             axios.get(`http://localhost:3231/usersContacts/searchContacts?value=${searchValue}`)
             .then((res)=>{
                 console.log(res.data);
-                // if(res.data.success==true){
-                //     this.setState({searchedContacts:res.data.stories})
-                // }
-                // else{
-                //     this.setState({searchedStories:[]})
-                // }
+                if(res.data.success==true){
+                    this.setState({searchedContacts:res.data.contacts})
+                }
+                else{
+                    this.setState({searchedContacts:[]})
+                }
             })  
         }
 
     //paginating the lists of contacts 
     loadContactDetails(){
-        //
         const param=new URLSearchParams(this.props.location.search);
         const page=parseInt(param.get('page')) || 1;
         if(page !== this.state.pager.currentPage){
@@ -62,8 +61,7 @@ class Home extends React.Component{
             }
     }
 
-    // for 
-
+    // for managing the openeing of modal
     handleOpen(event){
         event.preventDefault()
         var value=event.target.value
@@ -71,7 +69,7 @@ class Home extends React.Component{
         this.setState({deleteContactId:value})
         this.setState({showRemove:true})
     }
-
+    //for managing the closing of modal
     handleClose(event){
         this.setState({showRemove:false})
     }
@@ -97,16 +95,21 @@ class Home extends React.Component{
         return(
         <React.Fragment>
              <Form className="mt-2" style={{display:'flex',justifyContent:'center',postion:'fixed'}}>
-                <Input type="text" placeholder="search"  name='term' id='search' onChange={this.searchItem} style={{
-                    width:"60vw",
-                    minHeight:'6vh'
+                <Input type="text" placeholder="search by name"  name='term' id='search' onChange={this.searchItem} style={{
+                    width:"50vw",
+                    minHeight:'6vh',
+                    fontSize:'larger',
+                    border:'solid 1px grey',
+                    marginRight:'10%'
                 }} />
             </Form> 
+            <div style={{ display:'flex',justifyContent:'center'}}>
             <div style={{
                     backgroundColor:'grey',
-                    width:'60vw',
-                    marginBottom:'10px',
-                    marginLeft:'5px'
+                    width:'50vw',
+                    marginTop:'6px',
+                    marginRight:'10%'
+                   
                 }}>
                     {
                         this.state.searchedContacts.map((searchContact)=>{
@@ -124,6 +127,7 @@ class Home extends React.Component{
                         })
                     }
                 </div>
+                </div>
                 <Modal show={this.state.showRemove} onHide={this.handleClose}>
                     <Modal.Body >Are you sure you want to remove this account?</Modal.Body>
                         <Modal.Footer>
@@ -139,7 +143,7 @@ class Home extends React.Component{
                 <div className='col-md-9 offset-1'>
                     {this.state.allContacts.map((contact)=>{
                     return(
-                        <div className='row mt-3 mb-3 storyCard' style={{display:'flex',justifyContent:'center'}}>
+                        <div className='row mt-3 mb-3 storyCard' style={{display:'flex',justifyContent:'center'}} key={contact._id}>
                             <Card style={{
                                 minHeight:'30vh',
                                 width:'40vw',
@@ -202,7 +206,7 @@ class Home extends React.Component{
                     </div>    
                 </div>
                 <div className='col-md-2'>
-                    <Link to='/createContact'><span className='fa fa-plus fa-4x' id='createContact' onClick={this.createContact}>
+                    <Link to='/createContact'><span className='fa fa-plus fa-5x' id='createContact' onClick={this.createContact}>
                         </span></Link>
                     </div> 
             </div>

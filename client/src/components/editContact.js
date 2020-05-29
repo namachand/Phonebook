@@ -19,6 +19,10 @@ class EditContact extends React.Component{
     }
 
     componentDidMount(){
+        if(this.props.location.data!=undefined){
+            const id=this.props.location.data
+            window.localStorage.setItem('id',JSON.stringify(id))
+        }
         this.getContactToEdit()
     }
 
@@ -27,11 +31,10 @@ class EditContact extends React.Component{
     }
 
     getContactToEdit(){
-        const id=this.props.location.data
+        var contactId=JSON.parse(localStorage.getItem('id'));
         if(this.state.update==true){
-            axios.get(`http://localhost:3231/usersUpdate/getForEdit?id=${id}`)
+            axios.get(`http://localhost:3231/usersUpdate/getForEdit?id=${contactId}`)
             .then((res)=>{
-                // console.log(res.data.contacts)
                 this.setState({mobileNumbers:res.data.contacts.alternateMobileNumbers})
                 this.setState({emails:res.data.contacts.alternateEmails})
                 document.getElementById('contactName').value=res.data.contacts.name;
@@ -46,15 +49,14 @@ class EditContact extends React.Component{
     //adding the contact details to the database
     editContactDetails(event){
         event.preventDefault();
-        const id=this.props.location.data
+        var contactId=JSON.parse(localStorage.getItem('id'));
         var name=document.getElementById('contactName').value;
         var dateOfBirth=document.getElementById('contactDOB').value;
         var mainMobileNumber=document.getElementById('mobileNumber').value;
         var mainEmail=document.getElementById('contactEmail').value;
         var alternateMobileNumbers=this.state.mobileNumbers
         var alternateEmails=this.state.emails
-        // console.log(this.state.emails)
-        axios.put(`http://localhost:3231/usersUpdate/updateContactDetails?id=${id}`,{name:name,dateOfBirth:dateOfBirth,mainMobileNumber:mainMobileNumber,mainEmail:mainEmail,alternateEmails:alternateEmails,alternateMobileNumbers:alternateMobileNumbers})
+        axios.put(`http://localhost:3231/usersUpdate/updateContactDetails?id=${contactId}`,{name:name,dateOfBirth:dateOfBirth,mainMobileNumber:mainMobileNumber,mainEmail:mainEmail,alternateEmails:alternateEmails,alternateMobileNumbers:alternateMobileNumbers})
         .then((res)=>{
             alert(res.data.message)
             this.setState({update:true});
@@ -74,10 +76,9 @@ class EditContact extends React.Component{
                     <Input type="text"  value={currentValue} onChange={this.handleNumbers.bind(this, index)} style={{height:'6vh',marginTop:'2px',width:'26.5vw'}}/>
                 </div>
                 <div className='col-md-2'>
-                    <span className='fa fa-times fa-lg' onClick={this.removeNumber.bind(this, index)}>
+                    <span className='fa fa-times fa-lg' onClick={this.removeNumberClick.bind(this, index)}>
                         </span>
                 </div>  
-               {/* <input type='button' value='remove' onClick={this.removeClick.bind(this, i)}/> */}
             </div>          
         )
     }
@@ -87,13 +88,7 @@ class EditContact extends React.Component{
         mobileNumbers[i] = event.target.value;
         this.setState({ mobileNumbers });
     }
-    removeNumber(i,event){
-        event.preventDefault()
-    console.log('hey number');
-        // let values = [...this.state.values];
-        // values.splice(i,1);
-        // this.setState({ values });
-     }
+   
     //adding more emails on clicking the button
     addEmailsClick(){
         this.setState(prevState => ({ emails: [...prevState.emails, '']}))
@@ -106,7 +101,7 @@ class EditContact extends React.Component{
                     <Input type="text" value={currentValue} onChange={this.handleEmails.bind(this, index)} style={{height:'6vh',marginTop:'2px',width:'26.5vw'}}  placeholder='saveTrees@gmail.com'/>
                     </div>
                 <div className='col-md-2'>
-                    <span className='fa fa-times fa-lg ' onClick={this.removeEmail.bind(this, index)}>
+                    <span className='fa fa-times fa-lg ' onClick={this.removeEmailClick.bind(this, index)}>
                         </span>
                     </div>
                {/* <input type='button' value='remove' onClick={this.removeClick.bind(this, i)}/> */}
@@ -120,11 +115,17 @@ class EditContact extends React.Component{
         this.setState({ emails });
     }
 
-    removeEmail(i){
-        console.log('hey');
-        // let values = [...this.state.values];
-        // values.splice(i,1);
-        // this.setState({ values });
+     //removing  created phonenumbers
+     removeNumberClick(i){
+        let mobileNumbers = [...this.state.mobileNumbers];
+        mobileNumbers.splice(i,1);
+        this.setState({ mobileNumbers });
+     }
+    //removing  created emails
+     removeEmailClick(i){
+        let emails = [...this.state.emails];
+        emails.splice(i,1);
+        this.setState({ emails });
      }
     //going back to the home page
     goBack(){

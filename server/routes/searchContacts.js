@@ -13,7 +13,7 @@ router.route('/searchContacts').get((req,res,next)=>{
     if(r!=''){
         Contact.find({name: new RegExp('^'+r,'i')},(err,contacts)=>{ 
             if(err){
-                res.status(500).send({
+               return res.status(500).send({
                     message:'internal error'
                 })
             }  
