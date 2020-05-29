@@ -2,17 +2,26 @@ const mongoose= require('mongoose');
 const contactSchema=new mongoose.Schema({
     name:{
         type:String,
-        default:'',
+        required:true    
     },
     dateOfBirth:{
         type:String,
         default:'',
     },
-    mobileNumber:[{
+    mainMobileNumber:{
+        type:Number,
+        required:true,
+        unique:true
+    },
+    alternateMobileNumbers:[{
         type:Number,
         default:''
     }],
-    email:[{
+    mainEmail:{
+        type:String,
+        required:true
+    },
+    alternateEmails:[{
         type:String,
         default:''
     }],

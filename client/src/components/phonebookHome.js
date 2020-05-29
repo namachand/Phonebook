@@ -2,14 +2,25 @@ import React from 'react'
 import '../css/phonebookHome.css'
 import axios from 'axios';
 import {Link} from 'react-router-dom'
-import { Card, CardBody,Button} from 'reactstrap';
+import Modal from 'react-bootstrap/Modal'
+
+import { Card, CardBody,Button, Input,Form} from 'reactstrap';
 class Home extends React.Component{
     constructor(props){
         super(props)
         this.state={
             pager:{},
-            allContacts:[]
+            allContacts:[],
+            searchedContacts:[],
+            showRemove:false,
+            deleteContactId:''
+
         }
+        this.searchItem=this.searchItem.bind(this);
+        this.handleClose=this.handleClose.bind(this);
+        this.handleOpen=this.handleOpen.bind(this);
+        this.remove=this.remove.bind(this);
+
     }
 
     componentDidMount(){
@@ -19,6 +30,24 @@ class Home extends React.Component{
     componentDidUpdate(){
         this.loadContactDetails()
     }
+    //searching contacts of the users
+
+    searchItem(event){
+        event.preventDefault();
+        var searchValue=document.getElementById('search').value;
+        console.log('here',searchValue.length);
+            axios.get(`http://localhost:3231/usersContacts/searchContacts?value=${searchValue}`)
+            .then((res)=>{
+                console.log(res.data);
+                // if(res.data.success==true){
+                //     this.setState({searchedContacts:res.data.stories})
+                // }
+                // else{
+                //     this.setState({searchedStories:[]})
+                // }
+            })  
+        }
+
     //paginating the lists of contacts 
     loadContactDetails(){
         //
@@ -33,10 +62,79 @@ class Home extends React.Component{
             }
     }
 
+    // for 
+
+    handleOpen(event){
+        event.preventDefault()
+        var value=event.target.value
+        console.log(value);
+        this.setState({deleteContactId:value})
+        this.setState({showRemove:true})
+    }
+
+    handleClose(event){
+        this.setState({showRemove:false})
+    }
+
+    //for removing the user phonebook
+    remove(event){
+        event.preventDefault()
+        console.log('inside remove')
+        console.log(this.state.deleteContactId);
+        axios.get(`http://localhost:3231/deleteUsers/remove?id=${this.state.deleteContactId}`)
+        .then((res)=>{
+            if(res.data.success===true){
+                this.setState({showRemove:false})
+                window.location.href='/'
+            }
+            
+        })
+       
+    }
+
     render(){
         console.log(this.state.allContacts)
         return(
         <React.Fragment>
+             <Form className="mt-2" style={{display:'flex',justifyContent:'center',postion:'fixed'}}>
+                <Input type="text" placeholder="search"  name='term' id='search' onChange={this.searchItem} style={{
+                    width:"60vw",
+                    minHeight:'6vh'
+                }} />
+            </Form> 
+            <div style={{
+                    backgroundColor:'grey',
+                    width:'60vw',
+                    marginBottom:'10px',
+                    marginLeft:'5px'
+                }}>
+                    {
+                        this.state.searchedContacts.map((searchContact)=>{
+                            return(
+                                <div style={
+                                    {
+                                        color:'white',
+                                    }
+                                } key={searchContact._id}>
+                               <p  className='fa fa-search ml-2 mt-2' > <Link to={{pathname:'/showContact',data:searchContact._id}} style={{
+                                   color:'white'
+                               }}> {searchContact.name}</Link></p>
+                                </div>
+                            )
+                        })
+                    }
+                </div>
+                <Modal show={this.state.showRemove} onHide={this.handleClose}>
+                    <Modal.Body >Are you sure you want to remove this account?</Modal.Body>
+                        <Modal.Footer>
+                            <Button className='bg-danger' onClick={this.handleClose}>
+                                Close
+                            </Button>
+                            <Button className='bg-primary' onClick={this.remove}>
+                                Remove
+                            </Button>
+                        </Modal.Footer>
+                </Modal>
             <div className='row'>
                 <div className='col-md-9 offset-1'>
                     {this.state.allContacts.map((contact)=>{
@@ -63,19 +161,21 @@ class Home extends React.Component{
                                             <Link to={{pathname:'/editContact',data:contact._id}}><Button className='contactdetail' id='submitDetails' style={{width:'8vw',backgroundColor:'cadetblue'}}>Edit</Button></Link>
                                             </div>
                                         <div className='col-md-3'>
-                                            <Button className='contactdetail' id='submitDetails' style={{width:'8vw',backgroundColor:'red'}}>Remove</Button>
+                                            <Button className='contactdetail' id='submitDetails' value={contact._id} style={{width:'8vw',backgroundColor:'red'}} onClick={this.handleOpen}>Remove</Button>
                                             </div>
                                         </div>
                                         <div className='row' style={{backgroundColor:'papayawhip',marginTop:'15px',minHeight:'12vh'}}>
                                             <div className='col-md-4'>
-                                                {contact.mobileNumber.map((number)=>{
+                                            <p className='fa fa-phone fa-lg contactdetail mt-2'>  {contact.mainMobileNumber}</p>
+                                                {contact.alternateMobileNumbers.map((number)=>{
                                                     return(
                                                         <p className='fa fa-phone fa-lg contactdetail mt-2'>  {number}</p>
                                                     )
                                                 })}
                                                 </div>
                                             <div className='col-md-6 offset-2' >
-                                                {contact.email.map((mail)=>{
+                                            <p className='fa fa-envelope fa-lg contactdetail mt-2'>  {contact.mainEmail}</p>
+                                                {contact.alternateEmails.map((mail)=>{
                                                     return(
                                                         <p className='fa fa-envelope fa-lg contactdetail mt-2' style={{paddingTop:'5px'}}>  {mail}</p>
 

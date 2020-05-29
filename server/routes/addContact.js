@@ -7,8 +7,10 @@ router.route('/contactDetails').post((req,res)=>{
     const contactDetails=new Contact({
         name:req.body.name,
         dateOfBirth:req.body.dateOfBirth,
-        mobileNumber:req.body.mobileNumber,
-        email:req.body.email
+        mainMobileNumber:req.body.mainMobileNumber,
+        mainEmail:req.body.mainEmail,
+        alternateMobileNumbers:req.body.alternateMobileNumbers,
+        alternateEmails:req.body.alternateEmails
         })
         contactDetails.save()
         .then(()=>{

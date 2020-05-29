@@ -1,6 +1,7 @@
 #createContact{
+    position: fixed;
     float:right;
-    margin-top:90vh;
+    margin-top:70vh;
     margin-right:5vh;
 }
 .contactdetail{
@@ -8,4 +9,5 @@
 }
 #phoneAndEmail{
     border:solid,1px,black;
-background-color: papayawhip;}
+    background-color: papayawhip;
+}
